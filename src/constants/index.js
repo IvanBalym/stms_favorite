@@ -1,0 +1,8 @@
+export const SEARCH_LOAD = "SEARCH_LOAD";
+export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
+
+//TABLE
+export const TABLE_ROW_CLICK = "TABLE_ROW_CLICK";
+export const TABLE_SORT = "TABLE_SORT";
+export const TABLE_CHANGE_PAGE = "TABLE_CHANGE_PAGE";
+export const TABLE_ROWS_PER_PAGE = "TABLE_ROWS_PER_PAGE";

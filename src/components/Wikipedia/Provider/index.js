@@ -9,6 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import LoadingSVG from "../../../loading.svg";
 
 import TableHead from "../TableHead";
 
@@ -48,6 +49,17 @@ const styles = theme => ({
     },
     tableWrapper: {
         overflowX: "auto",
+        position: "relative"
+    },
+    loader: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        background: "#ffffffee",
+        zIndex: "100"
+    },
+    loaderSVG: {
+        marginTop: 130
     },
     textField: {
         marginLeft: theme.spacing.unit,
@@ -61,7 +73,7 @@ const styles = theme => ({
 class Provider extends React.Component {
     render() {
         const { classes } = this.props;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.props;
+        const { data, order, orderBy, rowsPerPage, page } = this.props;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
@@ -73,13 +85,18 @@ class Provider extends React.Component {
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    defaultValue={this.props.defaultQuery}
-                    onKeyUp={this.props.searchInput}
+                    defaultValue={this.props.defaultSearch}
+                    onKeyUp={(e) => this.props.handleSearch(e.target.value)}
                 />
                 <div className={classes.tableWrapper}>
+                    {
+                        this.props.loading &&
+                        <div className={classes.loader}>
+                            <img src={LoadingSVG} className={classes.loaderSVG} alt="loaderSVG" />
+                        </div>
+                    }
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <TableHead
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={this.props.handleRequestSort}
@@ -92,7 +109,7 @@ class Provider extends React.Component {
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={event => this.props.handleRowClick(event, row)}
+                                            onClick={() => this.props.handleRowClick(row)}
                                             role="checkbox"
                                             aria-checked={row.checked}
                                             tabIndex={-1}
@@ -142,7 +159,7 @@ class Provider extends React.Component {
                         "aria-label": "Next Page",
                     }}
                     onChangePage={this.props.handleChangePage}
-                    onChangeRowsPerPage={this.props.handleChangeRowsPerPage}
+                    onChangeRowsPerPage={(e) => this.props.handleChangeRowsPerPage(e.target.value)}
                 />
             </Paper>
         );
